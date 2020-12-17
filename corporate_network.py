@@ -1,114 +1,122 @@
-import csv
+class Node():
 
+    def __init__(self, NodeLabel, Type):
+        self.NodeL = NodeLabel
+        self.Type = Type
 
-# data structure to store graph edges
-class Edge:
-    def __init__(self, src, dest):
-        self.src = src
-        self.dest = dest
+    def __eq__(self, other):
+        return self.NodeL == other.NodeL
 
-
-class Graph:
-    # Constructor
-    def __init__(self, edges, N):
-        # allocate memory for the adjacency list
-        self.adj = [[] for _ in range(N)]
-
-        # add edges to the undirected graph
-        for current in edges:
-            # allocate node in adjacency List from src to dest
-            self.adj[current.src].append(current.dest)
-
-
-# print adjacency list representation of graph
-def printGraph(graph):
-    for src in range(len(graph.adj)):
-        # print current vertex and all its neighboring vertices
-        for dest in graph.adj[src]:
-            print(f"({src} -> {dest}) ", end="")
-        print()
-
-
-
+    def __str__(self):
+        return self.NodeL
 
 
 class CorporateNetwork():
     DirectorCompany = []  # list containing companies and directors
-    edges = [[], []]  # matrix of edges/ associations
+    edges = []  # matrix of edges/ associations
+
+    def printGraph(self):
+
+        print("*****************Graph Adjacency List**********************")
+
+        for node in self.DirectorCompany:
+            indx = self.DirectorCompany.index(node)
+            print("{}-> {}".format(node.NodeL, self.edges[indx]))
+
+    def displayAll(self):
+
+        print("********************DISPLAY ALL**************************")
+        totalcomp = 0
+        totaldirectors = 0
+        companyList = []
+        directorList = []
+
+        if (len(self.DirectorCompany) == 0):
+            print("The graph is empty")
+        else:
+            for node in self.DirectorCompany:
+                if (node.Type == "Company"):
+                    totalcomp = totalcomp + 1
+                    companyList.append(node.NodeL)
+                else:
+                    totaldirectors = totaldirectors + 1
+                    directorList.append(node.NodeL)
+
+            print("Total no. of Companies:{}".format(totalcomp))
+            print("Total no. of Directors:{}".format(totaldirectors))
+            print("List of Companies:")
+        print(*companyList, sep="\n")
+        print("List of Directors:")
+        print(*directorList, sep="\n")
+
+    def displayCompanies(self, Director):
+
+        print("*****************DISPLAY COMPANIES**************************")
+
+        indx = self.DirectorCompany.index(Node(Director, "Director"))
+        print("Director name:{}".format(Director))
+        print("List of Companies:")
+        print(*set(self.edges[indx]), sep="\n")
+
+    def displayDirectors(self, Company):
+
+        print("*****************DISPLAY DIRECTORS**************************")
+
+        indx = self.DirectorCompany.index(Node(Company, "Company"))
+        print("Company name:{}".format(Company))
+        print("List of Directors:")
+        print(*set(self.edges[indx]), sep="\n")
+
+    def findCommonDirector(self, CompanyA, CompanyB):
+
+        print("*****************FIND COMMON DIRECTORS**************************")
+
+        print("Company A:{}".format(CompanyA))
+        print("Company B:{}".format(CompanyB))
+        compAindx = self.DirectorCompany.index(Node(CompanyA, "Company"))
+        compBindx = self.DirectorCompany.index(Node(CompanyB, "Company"))
+
+
+        compADirectors = set(self.edges[compAindx])
+        compBDirectors = set(self.edges[compBindx])
+
+        if (compADirectors & compBDirectors):
+            print("Related: Yes\n{}".format(*list(compADirectors & compBDirectors)),sep="\n")
+        else:
+            print("Companies {} and {} have no common directors".format(CompanyA,CompanyB))
+
+
+
 
     def readCompanyDirfile(self, inputfile):
-        DirectorCompany=[]
-        edges=[]
         with open(inputfile, 'r') as fp:
             Lines = fp.readlines()
             for line in Lines:
-                list_comp_dir=line.rstrip('\n').split(' / ')
-                company = list_comp_dir[0]
-                for val in list_comp_dir:
-                    DirectorCompany.append(val)
-                    if val == company:
-                        continue
-                    edges.append((val, company))
-            nodes=list(set(DirectorCompany))
-        return edges,nodes
+                inputList = line.rstrip('\n').split(" / ")
+                try:
+                    indx = self.DirectorCompany.index(Node(inputList[0].rstrip(" "), "Company"))
+                    self.edges[indx].append(inputList[1:])
+                except ValueError as e:
+                    self.DirectorCompany.append(Node(inputList[0].rstrip(" "), "Company"))
+                    indx = self.DirectorCompany.index(Node(inputList[0].rstrip(" "), "Company"))
+                    self.edges.insert(indx, inputList[1:])
 
-
+                for director in inputList[1:]:
+                    try:
+                        indx = self.DirectorCompany.index(Node(director.rstrip(" "), "Director"))
+                        self.edges[indx].append(inputList[0])
+                    except ValueError as e:
+                        self.DirectorCompany.append(Node(director.rstrip(" "), "Director"))
+                        indx = self.DirectorCompany.index(Node(director.rstrip(" "), "Director"))
+                        self.edges.insert(indx, [inputList[0]])
 
 
 if __name__ == '__main__':
-    corp=CorporateNetwork()
-    edges1,nodes=corp.readCompanyDirfile('inputPS17.txt')
-    print(edges1)
-    print(nodes)
-'''
-    edges=[]
-    for edge1 in edges1:
-        edges.append(Edge(edge1[0],edge1[1]))
-    print(edges)
-        #Edge(edge1[0],edge1[1])
+    corp = CorporateNetwork()
+    corp.readCompanyDirfile('inputPS17.txt')
+    corp.printGraph()
+    corp.displayAll()
+    corp.displayCompanies("Maria Garcia")
+    corp.displayDirectors("ABCD Corp")
+    corp.findCommonDirector("ABCD Corp","HAHAHA Laughing Corp")
 
-
-    # Input: Edges in a directed graph
-    #edges = [Edge(0, 1), Edge(1, 2), Edge(2, 0), Edge(2, 1),Edge(3, 2), Edge(4, 5), Edge(5, 4)]
-
-    #Input: No of vertices
-    N = len(nodes)
-
-    #construct graph from given list of edges
-    graph = Graph(edges, N)
-
-    #print adjacency list representation of the graph
-    printGraph(graph)
-
-
-    def displayAll(self):
-        print(total_number_of_companies)
-        print(total_number_of_directors)
-        print('List of companies')
-        for company_name in list_of_companies:
-            print(company_name)
-        print('List of Directors')
-        for director_name in list_of_directors:
-            print(director_name)
-        pass
-
-    def displayCompanies(self, Director):
-        pass
-
-    def displayDirectors(self, Company):
-        pass
-
-    def findCommonDirector(self, CompanyA, CompanyB):
-        pass
-
-    def findRelatedCompany(self, CompanyA, CompanyB):
-        pass
-
-
-if __name__ == "__main__":
-    with open('inputps17.txt','r') as f:
-        company_name = [row[0] for row in csv.reader(f,delimiter='/')]
-        print(company_name)
-    corpNet = CorporateNetwork()
-    
-'''
