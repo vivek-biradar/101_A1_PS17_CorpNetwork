@@ -67,6 +67,26 @@ class CorporateNetwork():
         print("List of Directors:")
         print(*set(self.edges[indx]), sep="\n")
 
+    def findCommonDirector(self, CompanyA, CompanyB):
+
+        print("*****************FIND COMMON DIRECTORS**************************")
+
+        print("Company A:{}".format(CompanyA))
+        print("Company B:{}".format(CompanyB))
+        compAindx = self.DirectorCompany.index(Node(CompanyA, "Company"))
+        compBindx = self.DirectorCompany.index(Node(CompanyB, "Company"))
+
+
+        compADirectors = set(self.edges[compAindx])
+        compBDirectors = set(self.edges[compBindx])
+
+        if (compADirectors & compBDirectors):
+            print("Related: Yes\n{}".format(*list(compADirectors & compBDirectors)),sep="\n")
+        else:
+            print("Companies {} and {} have no common directors".format(CompanyA,CompanyB))
+
+
+
 
     def readCompanyDirfile(self, inputfile):
         with open(inputfile, 'r') as fp:
@@ -98,4 +118,5 @@ if __name__ == '__main__':
     corp.displayAll()
     corp.displayCompanies("Maria Garcia")
     corp.displayDirectors("ABCD Corp")
+    corp.findCommonDirector("ABCD Corp","HAHAHA Laughing Corp")
 
