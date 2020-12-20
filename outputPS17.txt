@@ -1,0 +1,34 @@
+********************DISPLAY ALL**************************
+Total no. of Companies:3
+Total no. of Directors:9
+List of Companies:
+ABCD Corp
+HAHAHA Laughing Corp
+Assignment 17
+List of Directors:
+James Smith
+Maria Garcia
+Maria Hernandez
+Juan Carlos
+Marcus Ceaser
+Sean Maxwell
+Vivek Biradar
+Vikrant Singh
+Atul Patil
+*****************DISPLAY COMPANIES**************************
+Director name:Maria Garcia
+List of Companies:
+['ABCD Corp', 'HAHAHA Laughing Corp']
+*****************DISPLAY DIRECTORS**************************
+Company name:ABCD Corp
+List of Directors:
+James Smith
+Maria Garcia
+*****************FIND COMMON DIRECTORS**************************
+Company A:ABCD Corp
+Company B:HAHAHA Laughing Corp
+Related: Yes,Maria Garcia
+*****************FIND RELATED COMPANY**************************
+Company A:ABCD Corp
+Company B:Assignment 17
+Related:Yes
