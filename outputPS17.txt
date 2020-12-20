@@ -22,8 +22,8 @@ List of Companies:
 *****************DISPLAY DIRECTORS**************************
 Company name:ABCD Corp
 List of Directors:
-James Smith
 Maria Garcia
+James Smith
 *****************FIND COMMON DIRECTORS**************************
 Company A:ABCD Corp
 Company B:HAHAHA Laughing Corp

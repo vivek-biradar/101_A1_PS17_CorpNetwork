@@ -107,13 +107,16 @@ class CorporateNetwork():
         print("Company B:{}".format(CompanyB))
         compAindx = self.DirectorCompany.index(Node(CompanyA, "Company"))
         compBindx = self.DirectorCompany.index(Node(CompanyB, "Company"))
+        common_direcor_list = []
+
+        for director in self.edges[compAindx]:
+
+            if(director in self.edges[compBindx]):
+                common_direcor_list.append(director)
 
 
-        compADirectors = set(self.edges[compAindx])
-        compBDirectors = set(self.edges[compBindx])
-
-        if (compADirectors & compBDirectors):
-            print("Related: Yes,{}".format(*list(compADirectors & compBDirectors)),sep=":")
+        if (len(common_direcor_list) > 0):
+            print("Related: Yes,{}".format(*common_direcor_list),sep=":")
         else:
             print("Companies {} and {} have no common directors".format(CompanyA,CompanyB))
 
