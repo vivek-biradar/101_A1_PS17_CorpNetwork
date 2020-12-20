@@ -27,6 +27,15 @@ class CorporateNetwork():
             indx = self.DirectorCompany.index(graph_node)
             print("{}-> {}".format(graph_node.node, self.edges[indx]))
 
+    def getAdjacencyList(self, node):
+
+        try :
+            input_node= Node(node, "")
+            indx = self.DirectorCompany.index(input_node)
+            return set(self.edges[indx])
+        except ValueError as e :
+            print("Error : Node {} does not exist in the graph".format(node))
+
     def displayAll(self):
 
         print("********************DISPLAY ALL**************************")
@@ -58,11 +67,14 @@ class CorporateNetwork():
         print("*****************DISPLAY COMPANIES**************************")
 
         try :
-            director_node = Node(Director, "Director")
+            director_node = Node(Director.upper(), "Director")
             indx = self.DirectorCompany.index(director_node)
-            print("Director name:{}".format(Director))
-            print("List of Companies:")
-            print(self.edges[indx], sep="\n")
+            if(self.DirectorCompany[indx].type == "Director"):
+                print("Director name:{}".format(Director))
+                print("List of Companies:")
+                print(*self.edges[indx], sep="\n")
+            else:
+                print("Error: Input Director : {} is not a director node in the graph".format(Director))
         except ValueError as e :
             print("Error : Director {} does not exist in the graph".format(Director))
 
@@ -71,33 +83,19 @@ class CorporateNetwork():
         print("*****************DISPLAY DIRECTORS**************************")
 
         try :
-            comp_node= Node(Company, "Company")
+            comp_node= Node(Company.upper(), "Company")
             indx = self.DirectorCompany.index(comp_node)
-            print("Company name:{}".format(Company))
-            print("List of Directors:")
-            print(*set(self.edges[indx]), sep="\n")
+            if (self.DirectorCompany[indx].type == "Company"):
+                print("Company name:{}".format(Company))
+                print("List of Directors:")
+                print(*self.edges[indx], sep="\n")
+            else:
+                print("Error: Input Company : {} is not a company node in the graph".format(Company))
         except ValueError as e :
             print("Error : Company {} does not exist in the graph".format(Company))
 
-    def getAdjacencyList(self, node):
 
-        try :
-            input_node= Node(node, "")
-            indx = self.DirectorCompany.index(input_node)
-            return set(self.edges[indx])
-        except ValueError as e :
-            print("Error : Node {} does not exist in the graph".format(node))
 
-    def getCompanies(self, Director):
-
-        print("*****************DISPLAY DIRECTORS**************************")
-
-        try :
-            director_node= Node(Director, "Director")
-            indx = self.DirectorCompany.index(director_node)
-            set(self.edges[indx])
-        except ValueError as e :
-            print("Error : Director {} does not exist in the graph".format(Director))
 
     def findCommonDirector(self, CompanyA, CompanyB):
 
@@ -105,20 +103,28 @@ class CorporateNetwork():
 
         print("Company A:{}".format(CompanyA))
         print("Company B:{}".format(CompanyB))
-        compAindx = self.DirectorCompany.index(Node(CompanyA, "Company"))
-        compBindx = self.DirectorCompany.index(Node(CompanyB, "Company"))
-        common_direcor_list = []
+        try :
+            compAindx = self.DirectorCompany.index(Node(CompanyA.upper(), "Company"))
+            compBindx = self.DirectorCompany.index(Node(CompanyB.upper(), "Company"))
+            common_direcor_list = []
 
-        for director in self.edges[compAindx]:
+            if(self.DirectorCompany[compAindx].type == "Company" and self.DirectorCompany[compBindx].type == "Company"):
 
-            if(director in self.edges[compBindx]):
-                common_direcor_list.append(director)
+                for director in self.edges[compAindx]:
+
+                    if(director in self.edges[compBindx]):
+                        common_direcor_list.append(director)
 
 
-        if (len(common_direcor_list) > 0):
-            print("Related: Yes,{}".format(*common_direcor_list),sep=":")
-        else:
-            print("Companies {} and {} have no common directors".format(CompanyA,CompanyB))
+                if (len(common_direcor_list) > 0):
+                    print("Related: Yes,{}".format(*common_direcor_list),sep=":")
+                else:
+                    print("Companies {} and {} have no common directors".format(CompanyA,CompanyB))
+            else:
+                print("Error: Either CompanyA:{} or CompanyB:{} is not a company node in the graph".format(CompanyA,CompanyB))
+        except ValueError as e :
+                print("Error : CompanyA:{} or CompanyB:{} does not exist in the graph".format(CompanyA,CompanyB))
+
 
 
     def bfs(self,startNode,endNode):
@@ -152,11 +158,21 @@ class CorporateNetwork():
         print("Company A:{}".format(CompanyA))
         print("Company B:{}".format(CompanyB))
 
-        res = self.bfs(CompanyA,CompanyB)
-        if(res):
-            print("Related:Yes")
-        else:
-            print("Related:No")
+        try :
+            compAindx = self.DirectorCompany.index(Node(CompanyA.upper(), "Company"))
+            compBindx = self.DirectorCompany.index(Node(CompanyB.upper(), "Company"))
+
+            if (self.DirectorCompany[compAindx].type == "Company" and self.DirectorCompany[compBindx].type == "Company"):
+                res = self.bfs(CompanyA.upper(), CompanyB.upper())
+                if (res):
+                    print("Related:Yes")
+                else:
+                    print("Related:No")
+            else:
+                print("Error: Either CompanyA:{} or CompanyB:{} is not a company node in the graph".format(CompanyA, CompanyB))
+
+        except ValueError as e :
+                print("Error : CompanyA:{} or CompanyB:{} does not exist in the graph".format(CompanyA,CompanyB))
 
 
     def readCompanyDirfile(self, inputfile):
@@ -164,21 +180,21 @@ class CorporateNetwork():
             lines = fp.readlines()
             for line in lines:
                 inputList = line.rstrip('\n').split(" / ")
-                comp_name = inputList[0].rstrip(" ")
+                comp_name = inputList[0].rstrip(" ").upper()
                 comp_node = Node(comp_name,"Company")
                 try:
                     indx = self.DirectorCompany.index(comp_node)
-                    self.edges[indx].append(inputList[1:])
+                    self.edges[indx].append([director.upper() for director in inputList[1:]])
                 except ValueError as e:
                     self.DirectorCompany.append(comp_node)
                     indx = len(self.DirectorCompany) - 1
-                    self.edges.insert(indx, inputList[1:])
+                    self.edges.insert(indx, [director.upper() for director in inputList[1:]])
 
                 for director in inputList[1:]:
-                    director_node = Node(director.rstrip(" "), "Director")
+                    director_node = Node(director.rstrip(" ").upper(), "Director")
                     try:
                         indx = self.DirectorCompany.index(director_node)
-                        self.edges[indx].append(inputList[0])
+                        self.edges[indx].append(comp_name)
                     except ValueError as e:
                         self.DirectorCompany.append(director_node)
                         indx = len(self.DirectorCompany) - 1
@@ -190,9 +206,28 @@ if __name__ == '__main__':
     corp.readCompanyDirfile('inputPS17.txt')
     #corp.printAdjList()
     corp.displayAll()
-    corp.displayCompanies("Maria Garcia")
-    corp.displayDirectors("ABCD Corp")
-    corp.findCommonDirector("ABCD Corp","HAHAHA Laughing Corp")
-    corp.findRelatedCompany("ABCD Corp", "Assignment 17")
+
+    with open("promptsPS17.txt", 'r') as fp:
+        lines = fp.readlines()
+        for line in lines:
+            func_to_run = line.rstrip('\n').split(":")[0].rstrip(" ").lstrip(" ")
+
+            if(func_to_run == "findCompany"):
+                director_name = line.rstrip('\n').split(":")[1].rstrip(" ").lstrip(" ")
+                corp.displayCompanies(director_name)
+            elif(func_to_run == "listDirectors"):
+                company_name = line.rstrip('\n').split(":")[1].rstrip(" ").lstrip(" ")
+                corp.displayDirectors(company_name)
+            elif(func_to_run == "CommonDirector"):
+                companyA_name = line.rstrip('\n').split(":")[1].rstrip(" ").lstrip(" ")
+                companyB_name = line.rstrip('\n').split(":")[2].rstrip(" ").lstrip(" ")
+                corp.findCommonDirector(companyA_name,companyB_name)
+            elif (func_to_run == "RelatedCompany"):
+                companyA_name = line.rstrip('\n').split(":")[1].rstrip(" ").lstrip(" ")
+                companyB_name = line.rstrip('\n').split(":")[2].rstrip(" ").lstrip(" ")
+                corp.findRelatedCompany(companyA_name,companyB_name)
+            else:
+                print("Error: Invalid input")
+
 
 

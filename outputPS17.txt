@@ -2,33 +2,32 @@
 Total no. of Companies:3
 Total no. of Directors:9
 List of Companies:
-ABCD Corp
-HAHAHA Laughing Corp
-Assignment 17
+ABCD CORP
+HAHAHA LAUGHING CORP
+ASSIGNMENT 17
 List of Directors:
-James Smith
-Maria Garcia
-Maria Hernandez
-Juan Carlos
-Marcus Ceaser
-Sean Maxwell
-Vivek Biradar
-Vikrant Singh
-Atul Patil
+JAMES SMITH
+MARIA GARCIA
+MARIA HERNANDEZ
+JUAN CARLOS
+MARCUS CEASER
+SEAN MAXWELL
+VIVEK BIRADAR
+VIKRANT SINGH
+ATUL PATIL
 *****************DISPLAY COMPANIES**************************
-Director name:Maria Garcia
-List of Companies:
-['ABCD Corp', 'HAHAHA Laughing Corp']
+Error: Input Director : ABCD COrp is not a director node in the graph
+*****************DISPLAY COMPANIES**************************
+Error: Input Director : HaHaHa Laughing Corp is not a director node in the graph
 *****************DISPLAY DIRECTORS**************************
-Company name:ABCD Corp
-List of Directors:
-Maria Garcia
-James Smith
+Error: Input Company : James Smith is not a company node in the graph
+*****************DISPLAY DIRECTORS**************************
+Error: Input Company : Maria Garcia is not a company node in the graph
 *****************FIND COMMON DIRECTORS**************************
-Company A:ABCD Corp
-Company B:HAHAHA Laughing Corp
-Related: Yes,Maria Garcia
+Company A:James Smith
+Company B:Maria Hernandez
+Error: Either CompanyA:James Smith or CompanyB:Maria Hernandez is not a company node in the graph
 *****************FIND RELATED COMPANY**************************
 Company A:ABCD Corp
-Company B:Assignment 17
+Company B:hahaha laughing CORP
 Related:Yes
